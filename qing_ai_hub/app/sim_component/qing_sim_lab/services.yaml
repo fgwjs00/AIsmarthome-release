@@ -1,0 +1,28 @@
+set_state:
+  name: 模拟设置传感器状态
+  description: 动态修改轻主机虚拟测试沙箱中传感器（人体存在、门磁、光照度、温湿度）的模拟数值或状态，用于现场真实触发自动化联动测试。
+  fields:
+    entity_id:
+      name: 目标模拟实体
+      description: 需要注入状态的虚拟测试实体 ID（例如 binary_sensor.sim_living_presence 或 sensor.sim_living_temperature）
+      required: true
+      example: "binary_sensor.sim_living_presence"
+      selector:
+        entity:
+          integration: qing_sim_lab
+          domain:
+            - binary_sensor
+            - sensor
+    value:
+      name: 模拟数值或状态
+      description: 要注入的数值或开关状态（如 on、off、25、29.5）
+      required: false
+      example: "on"
+      selector:
+        text:
+    state:
+      name: 备用状态值
+      description: 兼容状态字段（当未提供 value 时生效）
+      required: false
+      selector:
+        text:

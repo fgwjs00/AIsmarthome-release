@@ -1,0 +1,38 @@
+{
+  "title": "Qing AI Virtual Device Sandbox",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Enable Virtual Test Device Sandbox",
+        "description": "Provision virtual lights, covers, presence and climate sensors for automation testing.",
+        "data": {
+          "devices": "Simulated device keys (comma-separated)",
+          "auto_assign_areas": "Auto-assign room areas"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Virtual sandbox is already configured"
+    }
+  },
+  "services": {
+    "set_state": {
+      "name": "Set simulated sensor state",
+      "description": "Update simulated state or numeric value of a sandbox sensor entity.",
+      "fields": {
+        "entity_id": {
+          "name": "Target entity",
+          "description": "Entity ID of the virtual sensor"
+        },
+        "value": {
+          "name": "Simulated value",
+          "description": "Value or state to inject (e.g. on, off, 25, 29.5)"
+        },
+        "state": {
+          "name": "Fallback state",
+          "description": "Optional fallback state field"
+        }
+      }
+    }
+  }
+}

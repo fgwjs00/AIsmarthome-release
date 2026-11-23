@@ -1,0 +1,10 @@
+{
+  "domain": "qing_sim_lab",
+  "name": "轻主机虚拟测试沙箱",
+  "codeowners": ["@qing_ai_hub"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://www.home-assistant.io",
+  "iot_class": "local_push",
+  "version": "1.0.1"
+}
