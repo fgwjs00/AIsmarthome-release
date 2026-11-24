@@ -1,0 +1,44 @@
+configuration:
+  llm:
+    name: AI 大模型配置
+    description: 默认使用阿里云通义千问（DashScope OpenAI 兼容接口），也可在插件侧边栏界面中随时修改立即生效。
+    fields:
+      provider:
+        name: 模型服务商
+        description: 选择 qwen（通义千问）、deepseek、doubao、kimi 或 custom（任意 OpenAI 兼容接口）
+      base_url:
+        name: 接口地址 (Base URL)
+        description: 通义千问默认为 https://dashscope.aliyuncs.com/compatible-mode/v1
+      api_key:
+        name: API Key
+        description: 大模型接口密钥
+      model:
+        name: 模型名称
+        description: 通义千问推荐 qwen-plus 或 qwen-max
+      max_tokens:
+        name: 最大输出 Token
+      top_p:
+        name: Top P
+      temperature:
+        name: 温度 (Temperature)
+      concise_reply:
+        name: 精简回复模式
+      history_turns:
+        name: 上下文保留轮数
+  zigbee:
+    name: Zigbee 协调器兼容设置
+    description: 自动识别并兼容 ZHA 与 Zigbee2MQTT 双栈及各类串口/网络协调器。
+    fields:
+      stack:
+        name: Zigbee 协议栈优先策略
+      permit_duration:
+        name: 默认允许入网时长（秒）
+  safety:
+    name: 安全与确认策略
+    fields:
+      auto_apply_low_risk:
+        name: 低风险操作自动生效（开关设备、改名、分房间）
+      require_confirm_l2:
+        name: 创建/修改场景与自动化前需预览确认
+  log_level:
+    name: 日志级别

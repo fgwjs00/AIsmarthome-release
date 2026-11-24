@@ -1,0 +1,63 @@
+name: "轻主机 AI 助手"
+version: "0.3.4"
+slug: "qing_ai_hub"
+description: "全品牌智能家居 AI 场景与自动化创建调试、Zigbee 全协调器兼容与设备快速接入管理助手（默认通义千问）"
+# 正式对外分发时取消下方注释并替换为你们的成品镜像仓库地址（阿里云 ACR / 腾讯云 TCR / 自建 Harbor / GHCR）
+# image: "registry.cn-hangzhou.aliyuncs.com/your-namespace/qing-ai-hub-{arch}"
+arch:
+  - aarch64
+startup: application
+boot: auto
+init: true
+host_network: true
+ingress: true
+ingress_port: 8099
+panel_icon: "mdi:robot-happy-outline"
+panel_title: "AI 助手"
+panel_admin: true
+homeassistant_api: true
+hassio_api: true
+hassio_role: manager
+map:
+  - type: homeassistant_config
+    read_only: false
+  - type: addons
+    read_only: false
+services:
+  - "mqtt:want"
+options:
+  llm:
+    provider: "qwen"
+    base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    api_key: ""
+    model: "qwen-plus"
+    max_tokens: 8192
+    top_p: 0.7
+    temperature: 0.2
+    concise_reply: false
+    history_turns: 3
+  zigbee:
+    stack: "auto"
+    permit_duration: 120
+  safety:
+    auto_apply_low_risk: true
+    require_confirm_l2: true
+  log_level: "info"
+schema:
+  llm:
+    provider: "list(qwen|deepseek|doubao|kimi|custom)"
+    base_url: "str?"
+    api_key: "password?"
+    model: "str?"
+    max_tokens: "int(256,32000)"
+    top_p: "float(0,1)"
+    temperature: "float(0,2)"
+    concise_reply: bool
+    history_turns: "int(0,20)"
+  zigbee:
+    stack: "list(auto|zha|z2m)"
+    permit_duration: "int(30,254)"
+  safety:
+    auto_apply_low_risk: bool
+    require_confirm_l2: bool
+  log_level: "list(debug|info|warning|error)"

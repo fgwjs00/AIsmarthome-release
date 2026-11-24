@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>轻主机 AI 助手 · 智能家居场景与自动化工作台</title>
+  <link rel="stylesheet" href="./static/styles.css?v=5174997b0c" />
+</head>
+<body>
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+  </div>
+  <div class="app-frame">
+    <header class="topbar">
+      <div class="brand-group">
+        <button class="icon-btn mobile-only" id="btnToggleSidebar" title="展开/收起会话栏" aria-label="切换侧边栏">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3L3 8l9 5 9-5-9-5z"/><path d="M3 16l9 5 9-5"/><path d="M3 12l9 5 9-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">轻主机 AI 助手 <span class="design-tag" id="appVersionBadge" title="轻主机 AI 助手当前运行版本号">v0.3.4</span></div>
+          <div class="brand-status">
+            <span class="pulse-dot" id="haStatusDot"></span>
+            <span id="statusSub">正在连接 Home Assistant...</span>
+          </div>
+        </div>
+      </div>
+      <nav class="seg-nav" id="navTabs" role="tablist">
+        <button class="seg-btn nav-tab active" data-tab="chat" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 16l.8 2L22 18.8l-2.2.8L19 21.6l-.8-2-2.2-.8 2.2-.8L19 16z"/></svg>
+          <span>AI 创作台</span>
+        </button>
+        <button class="seg-btn nav-tab" data-tab="scenes" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/></svg>
+          <span>场景与自动化</span>
+          <span class="seg-badge hidden" id="navCountRules">0</span>
+        </button>
+        <button class="seg-btn nav-tab" data-tab="onboarding" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1.2"/></svg>
+          <span>快速配网</span>
+        </button>
+        <button class="seg-btn nav-tab" data-tab="devices" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>全屋设备</span>
+          <span class="seg-badge hidden" id="navCountDevices">0</span>
+        </button>
+        <button class="seg-btn nav-tab" data-tab="settings" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>模型与回滚</span>
+        </button>
+      </nav>
+      <div class="topbar-right">
+        <button class="model-chip loc-top-chip" id="btnTopLocation" title="点击校准中国城市定位与日出日落时间">
+          <span id="topLocText">📍 定位检测中</span>
+        </button>
+        <button class="model-chip" id="llmBadge" title="点击配置大模型服务商与 API Key">
+          <span class="pulse-dot" id="llmDot"></span>
+          <span id="llmBadgeText">模型加载中</span>
+        </button>
+        <button class="icon-btn" id="btnSyncHa" title="从 Home Assistant 同步最新房间、设备与状态">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-15.5-6.36L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 15.5 6.36L21 16"/><path d="M16 16h5v5"/></svg>
+        </button>
+        <button class="icon-btn" id="btnThemeToggle" title="切换曜石深空 / 晨雾纯白外观">
+          <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="themeIconMoon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </header>
+    <main class="view-pane tab-panel active" id="tab-chat">
+      <div class="sidebar-backdrop hidden" id="sidebarBackdrop"></div>
+      <aside class="studio-rail" id="chatSidebar">
+        <button class="btn-primary-grad" id="btnNewSession">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span>开启新创作</span>
+        </button>
+        <div class="rail-label">近期调试会话</div>
+        <div class="session-stack" id="sessionList"></div>
+        <div class="topology-mini">
+          <div class="topo-head">
+            <span>全屋实时拓扑</span>
+            <span class="ctx-badge" id="contextTurnsBadge">3 轮极速记忆</span>
+          </div>
+          <div class="topo-grid">
+            <div class="topo-cell" data-goto-tab="devices">
+              <div class="topo-num" id="miniStatAreas">-</div>
+              <div class="topo-lbl">房间区域</div>
+            </div>
+            <div class="topo-cell" data-goto-tab="devices">
+              <div class="topo-num" id="miniStatDevices">-</div>
+              <div class="topo-lbl">物理设备</div>
+            </div>
+            <div class="topo-cell" data-goto-tab="scenes">
+              <div class="topo-num" id="miniStatScenes">-</div>
+              <div class="topo-lbl">场景模式</div>
+            </div>
+            <div class="topo-cell" data-goto-tab="scenes">
+              <div class="topo-num" id="miniStatAutos">-</div>
+              <div class="topo-lbl">自动化联动</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <section class="studio-stage">
+        <div class="key-onboarding-bar hidden" id="keySetupBanner">
+          <div class="key-onboarding-left">
+            <div class="key-onboarding-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </div>
+            <div>
+              <div class="key-onboarding-title">一步启用通义千问 AI 场景与自动化编排</div>
+              <div class="key-onboarding-sub">粘贴阿里云百炼 DashScope API Key 即可用口语创建、现场试光微调与排错（密钥仅保存在本地主机）</div>
+            </div>
+          </div>
+          <div class="key-onboarding-actions">
+            <input type="password" id="quickApiKeyInput" class="input-clean" placeholder="粘贴 sk-... 密钥" />
+            <button class="btn btn-emerald" id="btnQuickSaveKey">立即启用</button>
+            <button class="btn" id="btnGotoFullSettings">切换其他模型</button>
+          </div>
+        </div>
+        <div class="chat-scroll" id="chatScrollWrap">
+          <div class="chat-container" id="chatMessages"></div>
+        </div>
+        <div class="composer-dock-wrap">
+          <div class="session-length-banner hidden" id="sessionLengthBanner" role="status">
+            <div class="session-length-text" id="sessionLengthText"></div>
+            <div class="session-length-actions">
+              <button type="button" class="btn-new-win-pill" id="btnBannerNewSession">✨ 开启新窗口</button>
+              <button type="button" class="btn-dismiss-banner" id="btnDismissSessionBanner" title="暂时关闭提示" aria-label="关闭提示">×</button>
+            </div>
+          </div>
+          <div class="composer-dock">
+            <div class="dock-quick-strip">
+              <button type="button" class="mini-chip prompt-chip" data-prompt="帮我看看家里目前接入了哪些房间和品牌的设备？">全屋设备盘点</button>
+              <button type="button" class="mini-chip prompt-chip" data-prompt="根据客厅现有的灯、窗帘和空调，帮我生成观影、会客、休闲三个场景">生成客厅氛围场景</button>
+              <button type="button" class="mini-chip prompt-chip" data-prompt="把客厅现在调好的真实灯光和空调状态抓拍保存为「舒适模式」场景">实景抓拍当前状态</button>
+              <button type="button" class="mini-chip prompt-chip" data-prompt="帮我建一条自动化：晚上18点到次日6点之间，入户门打开时自动打开玄关灯">新建晚归开门亮灯</button>
+              <button type="button" class="mini-chip prompt-chip" data-prompt="帮我建一条离家联动：关闭所有空调和灯，5分钟后让扫地机开始清扫">跨品牌离家清扫</button>
+              <button type="button" class="mini-chip visual-auto-chip" id="btnOpenVisualAutoQuick" title="打开图形化点选界面创建自动化联动">🎛️ 可视化编排联动</button>
+              <button type="button" class="mini-chip restore-chip" id="btnRestoreSnap" title="一键恢复最近一次现场试光前的设备状态">↩ 恢复试光前状态</button>
+            </div>
+            <div class="dock-input-row">
+              <textarea
+                id="chatInput"
+                class="dock-textarea"
+                rows="1"
+                placeholder="描述你想创建或微调的场景与自动化（Enter 发送，Shift + Enter 换行）..."
+              ></textarea>
+              <button class="send-btn" id="btnSendChat" title="发送指令">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <main class="view-pane tab-panel" id="tab-scenes">
+      <div class="page-wrap">
+        <div class="page-head">
+          <div>
+            <h2>场景与自动化管理中心</h2>
+            <p>直观管理全屋氛围场景与联动规则，支持跳过条件测试动作与一键 AI Trace 轨迹诊断</p>
+          </div>
+          <div class="btn-row">
+            <div class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              <input type="text" id="rulesSearchInput" placeholder="搜索场景或自动化名称..." />
+            </div>
+            <button class="btn btn-cyan-accent" id="btnOpenVisualAuto">
+              <span>🎛️ 可视化新建自动化</span>
+            </button>
+            <button class="btn-primary-grad" id="btnJumpCreateRule">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              <span>AI 口语新建</span>
+            </button>
+          </div>
+        </div>
+        <div id="scenesLocBanner" class="loc-alert-banner hidden"></div>
+        <div class="pill-filter-bar" id="rulesAreaPills"></div>
+        <div class="grid-2">
+          <section class="panel-card">
+            <div class="panel-head">
+              <h3 class="panel-title">
+                <span>场景模式</span>
+                <span class="badge badge-amber" id="scenesCountBadge">0 个场景</span>
+              </h3>
+              <button class="btn" id="btnReloadScenes">刷新</button>
+            </div>
+            <div id="scenesList"></div>
+          </section>
+          <section class="panel-card">
+            <div class="panel-head">
+              <h3 class="panel-title">
+                <span>自动化联动规则</span>
+                <span class="badge badge-emerald" id="autosCountBadge">0 条规则</span>
+              </h3>
+              <button class="btn" id="btnReloadAutomations">刷新</button>
+            </div>
+            <div id="automationsList"></div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <main class="view-pane tab-panel" id="tab-onboarding">
+      <div class="page-wrap">
+        <div class="page-head">
+          <div>
+            <h2>全品牌设备快速配网中心</h2>
+            <p>自动兼容 ZHA / Zigbee2MQTT 全系列协调器、Matter 配对码直连与主流国产品牌向导</p>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="btnOpenLocFromOnboard" title="校准中国城市经纬度与精准日出日落时间">📍 定位与日落校准</button>
+            <button class="btn" id="btnRefreshDiscovery">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 0 0-15.5-6.36L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 15.5 6.36L21 16"/><path d="M16 16h5v5"/></svg>
+              <span>重新扫描局域网</span>
+            </button>
+          </div>
+        </div>
+        <div id="onboardLocBanner" class="loc-alert-banner hidden"></div>
+        <div class="grid-2" style="margin-bottom: 20px;" id="ecoBridgeSection">
+          <section class="panel-card eco-bridge-card eco-apple">
+            <div class="panel-head" style="flex-wrap: wrap;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div class="eco-icon-badge apple-grad" aria-label="Apple">
+                  <svg class="eco-brand-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83zM15.97 6.33c.67-.81 1.12-1.94 1-3.07-.96.04-2.13.64-2.82 1.45-.61.7-1.15 1.85-.99 2.95 1.07.08 2.15-.52 2.81-1.33z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="panel-title">接入苹果「家庭 (Home)」App & Siri</h3>
+                  <div class="sub-note" id="appleBridgeSub">基于 HA 原生局域网 HomeKit Bridge 直连，零延迟同步全屋灯光、空调、窗帘与场景</div>
+                </div>
+              </div>
+              <span class="badge badge-muted" id="appleBridgeBadge">检测中</span>
+            </div>
+            <div class="eco-card-foot">
+              <span class="sub-note" id="appleBridgeCountNote">支持 iPhone 控制中心、iPad 与 Siri 语音控制</span>
+              <button class="btn-primary-grad" id="btnSetupAppleHome">⚡ 一键生成苹果扫码配对</button>
+            </div>
+          </section>
+          <section class="panel-card eco-bridge-card eco-huawei">
+            <div class="panel-head" style="flex-wrap: wrap;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div class="eco-icon-badge huawei-grad" aria-label="Huawei">
+                  <svg class="eco-brand-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M3.67 6.14S1.82 7.91 1.72 9.78v.35c.08 1.51 1.22 2.4 1.22 2.4 1.83 1.79 6.26 4.04 7.3 4.55 0 0 .06.03.1-.01l.02-.04v-.04C7.52 10.8 3.67 6.14 3.67 6.14zM9.65 18.6c-.02-.08-.1-.08-.1-.08l-7.38.26c.8 1.43 2.15 2.53 3.56 2.2.96-.25 3.16-1.78 3.88-2.3.06-.05.04-.09.04-.09zm.08-.78C6.49 15.63.21 12.28.21 12.28c-.15.46-.2.9-.21 1.3v.07c0 1.07.4 1.82.4 1.82.8 1.69 2.34 2.2 2.34 2.2.7.3 1.4.31 1.4.31.12.02 4.4 0 5.54 0 .05 0 .08-.05.08-.05v-.06c0-.03-.03-.05-.03-.05zM9.06 3.19a3.42 3.42 0 00-2.57 3.15v.41c.03.6.16 1.05.16 1.05.66 2.9 3.86 7.65 4.55 8.65.05.05.1.03.1.03a.1.1 0 00.06-.1c1.06-10.6-1.11-13.42-1.11-13.42-.32.02-1.19.23-1.19.23zm8.299 2.27s-.49-1.8-2.44-2.28c0 0-.57-.14-1.17-.22 0 0-2.18 2.81-1.12 13.43.01.07.06.08.06.08.07.03.1-.03.1-.03.72-1.03 3.9-5.76 4.55-8.64 0 0 .36-1.4.02-2.34zm-2.92 13.07s-.07 0-.09.05c0 0-.01.07.03.1.7.51 2.85 2 3.88 2.3 0 0 .16.05.43.06h.14c.69-.02 1.9-.37 3-2.26l-7.4-.25zm7.83-8.41c.14-2.06-1.94-3.97-1.94-3.98 0 0-3.85 4.66-6.67 10.8 0 0-.03.08.02.13l.04.01h.06c1.06-.53 5.46-2.77 7.28-4.54 0 0 1.15-.93 1.21-2.42zm1.52 2.14s-6.28 3.37-9.52 5.55c0 0-.05.04-.03.11 0 0 .03.06.07.06 1.16 0 5.56 0 5.67-.02 0 0 .57-.02 1.27-.29 0 0 1.56-.5 2.37-2.27 0 0 .73-1.45.17-3.14z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="panel-title">接入华为「智慧生活」App & 小艺</h3>
+                  <div class="sub-note" id="huaweiBridgeSub">基于标准 Matter 跨生态网桥，自动过滤诊断噪音并生成华为智慧生活扫码二维码</div>
+                </div>
+              </div>
+              <span class="badge badge-muted" id="huaweiBridgeBadge">检测中</span>
+            </div>
+            <div class="eco-card-foot">
+              <span class="sub-note" id="huaweiBridgeCountNote">配合华为 Matter 中枢路由器/音箱局域网扫码直连</span>
+              <button class="btn btn-cyan-accent" id="btnSetupHuaweiBridge">⚡ 一键智能配置华为桥接</button>
+            </div>
+          </section>
+        </div>
+        <div class="grid-2" style="margin-bottom: 20px;">
+          <section class="panel-card">
+            <div class="panel-head" style="flex-wrap: wrap;">
+              <div>
+                <h3 class="panel-title">Zigbee 网关与子设备入网舱</h3>
+                <div class="sub-note" id="zigbeeSummaryText">正在探测 Zigbee 协调器硬件与协议栈...</div>
+              </div>
+              <div class="btn-row">
+                <select id="zigbeeStackSelect" class="select-clean">
+                  <option value="auto">自动选择 (ZHA / Z2M)</option>
+                  <option value="zha">ZHA 原生网关</option>
+                  <option value="z2m">Zigbee2MQTT</option>
+                </select>
+                <button class="btn" id="btnSetupZigbeeGw" title="自动识别本地 USB 协调器或接入局域网网络网关">⚙️ 智能配置网关</button>
+                <button class="btn btn-emerald" id="btnStartZigbee">开启 120s 入网</button>
+                <button class="btn btn-rose hidden" id="btnStopZigbee">停止入网</button>
+              </div>
+            </div>
+            <div id="zigbeePortsBox" class="ports-strip"></div>
+            <div id="zigbeeSetupCallout" class="zigbee-callout hidden"></div>
+            <div class="radar-box hidden" id="zigbeePairingBanner">
+              <div class="radar-circle" id="pairingCountdownNum">120s</div>
+              <div style="flex:1; min-width: 0;">
+                <div class="radar-headline" id="pairingBannerTitle">正在允许 Zigbee 子设备入网...</div>
+                <div class="sub-note">请长按绿米/涂鸦/宜家等子设备重置键 5 秒直至指示灯快闪</div>
+                <div class="progress-rail"><div class="progress-fill" id="pairingProgressBar"></div></div>
+                <div id="pairingJoinedList" class="joined-wrap"></div>
+              </div>
+            </div>
+          </section>
+          <section class="panel-card">
+            <div class="panel-head">
+              <div>
+                <h3 class="panel-title">Matter 配对 & 局域网自动发现</h3>
+                <div class="sub-note">自动嗅探同一路由器下的格力空调、Yeelight、HomeKit、ESPHome 设备</div>
+              </div>
+              <span class="badge badge-cyan" id="discoveredCountBadge">0 台待绑定</span>
+            </div>
+            <div class="matter-bar">
+              <input type="text" id="matterCodeInput" class="input-clean" style="flex:1" placeholder="输入 Matter 11/21 位数字配对码或 MT:... 二维码串" />
+              <button class="btn-primary-grad" id="btnCommissionMatter">Matter 配对</button>
+            </div>
+            <div id="discoveredList"></div>
+          </section>
+        </div>
+        <section class="panel-card">
+          <div class="panel-head" style="flex-wrap: wrap;">
+            <div>
+              <h3 class="panel-title">主流智能家居品牌接入向导</h3>
+              <div class="sub-note">点击任意品牌直接拉起配置流弹窗，或手动输入任意 HA 集成标识启动</div>
+            </div>
+            <div class="btn-row">
+              <div class="search-field">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="brandSearchInput" placeholder="搜索米家 / 格力 / 石头..." />
+              </div>
+              <input type="text" id="customDomainInput" class="input-clean" style="width: 175px;" placeholder="自定义 domain (如 broadlink)" />
+              <button class="btn" id="btnStartCustomDomain">启动向导</button>
+            </div>
+          </div>
+          <div class="pill-filter-bar" id="brandCategoryPills"></div>
+          <div class="brands-matrix" id="brandGrid"></div>
+        </section>
+      </div>
+    </main>
+    <main class="view-pane tab-panel" id="tab-devices">
+      <div class="page-wrap">
+        <div class="page-head">
+          <div>
+            <h2>全屋设备拓扑与房间分区</h2>
+            <p>规范的中文名称与房间归属可大幅提升 AI 场景与跨品牌联动的精准度</p>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="btnNewArea">+ 新建房间</button>
+            <button class="btn" id="btnManageAreas">房间管理</button>
+            <button class="btn-primary-grad" id="btnBatchOrganize">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></svg>
+              <span>AI 批量中文改名与分区</span>
+            </button>
+          </div>
+        </div>
+        <div class="pill-filter-bar" id="deviceAreaPills"></div>
+        <section class="panel-card table-panel">
+          <div class="table-toolbar">
+            <div class="btn-row">
+              <select id="filterArea" class="select-clean"><option value="">全部房间</option></select>
+              <div class="search-field">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="filterBrand" placeholder="筛选名称 / 品牌 / 型号 / 实体..." />
+              </div>
+              <label class="switch-label-wrap">
+                <span class="switch"><input type="checkbox" id="filterUnassigned" /><span class="slider"></span></span>
+                <span>仅看未分房间</span>
+              </label>
+              <label class="switch-label-wrap" title="查看已被自动隐藏的 HA 系统虚拟组件（如 Sun、Supervisor、蓝牙适配器、备份服务）及手动隐藏的设备">
+                <span class="switch"><input type="checkbox" id="filterShowHidden" /><span class="slider"></span></span>
+                <span id="filterShowHiddenLabel">显示已隐藏项</span>
+              </label>
+            </div>
+            <span class="sub-note" id="devicesCountSummary">加载中...</span>
+          </div>
+          <div class="table-scroll">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>设备名称</th>
+                  <th>品牌 / 集成</th>
+                  <th>硬件型号</th>
+                  <th>所属房间</th>
+                  <th>主控实体</th>
+                  <th>状态</th>
+                  <th style="text-align:right">操作</th>
+                </tr>
+              </thead>
+              <tbody id="devicesTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+    <main class="view-pane tab-panel" id="tab-settings">
+      <div class="page-wrap">
+        <div class="page-head">
+          <div>
+            <h2>AI 引擎配置与时光机回滚</h2>
+            <p>短上下文极速编排架构（默认保留最近 3 轮对话 + 实时设备召回快照），修改后毫秒级热生效</p>
+          </div>
+          <span class="badge badge-cyan" id="settingsVersionBadge">轻主机 AI 助手 v0.3.4</span>
+        </div>
+        <div class="grid-2 align-top">
+          <section class="panel-card">
+            <h3 class="panel-title" style="margin-bottom: 14px;">大模型服务商选择</h3>
+            <div class="provider-grid" id="providerCards"></div>
+            <div class="form-grid-2">
+              <div class="field-box">
+                <label for="cfgBaseUrl">接口地址 (Base URL)</label>
+                <input type="text" id="cfgBaseUrl" class="input-clean" placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1" />
+              </div>
+              <div class="field-box">
+                <label for="cfgModel">模型名称 (Model)</label>
+                <input type="text" id="cfgModel" class="input-clean" list="modelSuggestions" placeholder="qwen-plus" />
+                <datalist id="modelSuggestions"></datalist>
+              </div>
+            </div>
+            <div class="field-box">
+              <div class="field-label-row">
+                <label for="cfgApiKey">API Key 密钥 <span id="apiKeyStatus" class="key-status-note"></span></label>
+                <button type="button" class="text-btn danger hidden" id="btnClearApiKey">清除已存密钥</button>
+              </div>
+              <div class="key-input-group">
+                <input type="password" id="cfgApiKey" class="input-clean" placeholder="填入 sk-... 密钥（已保存时留空保持原密钥不变）" />
+                <button type="button" class="eye-toggle" id="btnToggleKeyEye" title="显示或隐藏输入内容">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-grid-4">
+              <div class="field-box">
+                <label for="cfgHistoryTurns" title="专注创建与微调场景自动化，省流且响应更快">上下文轮数</label>
+                <input type="number" id="cfgHistoryTurns" class="input-clean" value="3" min="0" max="20" />
+              </div>
+              <div class="field-box">
+                <label for="cfgMaxTokens">最大 Token</label>
+                <input type="number" id="cfgMaxTokens" class="input-clean" value="8192" min="256" max="32000" />
+              </div>
+              <div class="field-box">
+                <label for="cfgTemp">Temperature</label>
+                <input type="number" id="cfgTemp" class="input-clean" value="0.2" step="0.05" min="0" max="2" />
+              </div>
+              <div class="field-box">
+                <label for="cfgTopP">Top P</label>
+                <input type="number" id="cfgTopP" class="input-clean" value="0.7" step="0.05" min="0" max="1" />
+              </div>
+            </div>
+            <div class="switches-stack">
+              <div class="rule-item compact-rule">
+                <div>
+                  <div class="rule-title-sm">场景与自动化预览确认保护（推荐开启）</div>
+                  <div class="sub-note">新建或修改先出可视化草稿卡，试光满意或确认后再写入 HA</div>
+                </div>
+                <label class="switch"><input type="checkbox" id="cfgConfirmL2" checked /><span class="slider"></span></label>
+              </div>
+              <div class="rule-item compact-rule">
+                <div>
+                  <div class="rule-title-sm">低风险控制立即执行</div>
+                  <div class="sub-note">日常开关灯、调空调温度、设备改名与分配房间直接生效</div>
+                </div>
+                <label class="switch"><input type="checkbox" id="cfgAutoL1" checked /><span class="slider"></span></label>
+              </div>
+              <div class="rule-item compact-rule">
+                <div>
+                  <div class="rule-title-sm">精简回复模式</div>
+                  <div class="sub-note">设备控制成功或生成草稿后仅一句话简短回复，不输出长篇说明</div>
+                </div>
+                <label class="switch"><input type="checkbox" id="cfgConcise" /><span class="slider"></span></label>
+              </div>
+            </div>
+            <button class="btn-primary-grad full-width-btn" id="btnSaveSettings">保存配置（立即热生效）</button>
+          </section>
+          <section class="panel-card">
+            <div class="panel-head" style="flex-wrap:wrap;gap:10px">
+              <div>
+                <h3 class="panel-title">时光机变更记录与一键回滚</h3>
+                <div class="sub-note">自动备份每次场景、自动化与批量改名前的原始配置快照</div>
+              </div>
+              <div class="btn-row">
+                <button class="btn" id="btnPruneStaleChanges" title="自动清除已回滚及已被删除的测试场景/自动化残留记录">🧹 清理失效记录</button>
+                <button class="btn" id="btnClearAllChanges" title="清空全部时光机变更历史（不影响 HA 当前已保存的场景与设备）">🗑 清空</button>
+                <button class="btn" id="btnReloadChanges">刷新</button>
+              </div>
+            </div>
+            <div id="changesList" class="timeline-wrap"></div>
+          </section>
+        </div>
+        <section class="panel-card diag-panel">
+          <div class="panel-head" style="flex-wrap:wrap;gap:12px">
+            <div>
+              <h3 class="panel-title">🩺 系统诊断日志与问题排查</h3>
+              <div class="sub-note">自动记录后端、AI 工具与页面异常，并全程自动脱敏（绝不导出 API 密钥、密码、Token 与配对码）</div>
+            </div>
+            <div class="btn-row" style="flex-wrap:wrap">
+              <span class="chip-meta" id="diagError24hBadge">近 24h 异常: 0</span>
+              <span class="chip-meta" id="diagLogSizeBadge">日志占用: 0 KB</span>
+              <button class="btn-primary-grad" id="btnExportDiagZip">📦 一键导出脱敏诊断包 (.zip)</button>
+              <button class="btn hidden" id="btnUploadDiagZip" title="将脱敏后的诊断包直接上传至技术支持收集服务">☁️ 一键上报技术支持</button>
+              <button class="btn" id="btnReloadDiag">刷新</button>
+              <button class="btn" id="btnClearDiagErrors" title="清空已记录的异常事件列表">🗑 清空异常</button>
+            </div>
+          </div>
+          <div class="diag-toolbar">
+            <div class="seg-tabs" id="diagSubTabs">
+              <button type="button" class="seg-tab active" data-diag-tab="errors">异常事件 <span class="diag-tab-count" id="diagErrorsCount">0</span></button>
+              <button type="button" class="seg-tab" data-diag-tab="audits">工具调用审计 <span class="diag-tab-count" id="diagAuditsCount">0</span></button>
+              <button type="button" class="seg-tab" data-diag-tab="logs">实时运行日志</button>
+            </div>
+            <div class="diag-toolbar-right">
+              <label class="diag-inline-check hidden" id="diagAuditOnlyErrWrap">
+                <input type="checkbox" id="diagAuditOnlyErr" />
+                <span>仅看失败调用</span>
+              </label>
+              <button type="button" class="btn hidden" id="btnCopyDiagLog">📋 复制日志</button>
+            </div>
+          </div>
+          <div id="diagErrorsPanel" class="diag-panel-body">
+            <div id="diagErrorsList" class="diag-list"></div>
+          </div>
+          <div id="diagAuditsPanel" class="diag-panel-body hidden">
+            <div id="diagAuditsList" class="diag-list"></div>
+          </div>
+          <div id="diagLogsPanel" class="diag-panel-body hidden">
+            <pre id="diagLogPre" class="diag-log-pre">正在加载运行日志...</pre>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="modal-backdrop hidden" id="flowModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="flowModalTitle">品牌设备接入向导</h3>
+        <button class="icon-btn" id="btnCloseFlowModal" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="flowModalBody"></div>
+    </div>
+  </div>
+  <div class="modal-backdrop hidden" id="autoBuilderModal">
+    <div class="modal-card modal-wide">
+      <div class="modal-header">
+        <div>
+          <h3 id="autoBuilderTitle">🎛️ 自动化可视化编排工作台</h3>
+          <div class="sub-note">零代码点选真实房间设备与动作参数，自动经过 Home Assistant 官方规范校验</div>
+        </div>
+        <button class="icon-btn" id="btnCloseAutoBuilder" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="autoBuilderBody">
+        <div class="vb-template-strip" id="vbTemplateStrip">
+          <span class="vb-tpl-label">快捷模板：</span>
+          <button type="button" class="mini-chip" data-vb-tpl="night_light">🌙 晚归开门亮灯</button>
+          <button type="button" class="mini-chip" data-vb-tpl="leave_clean">🏃 离家关电+延迟清扫</button>
+          <button type="button" class="mini-chip" data-vb-tpl="temp_ac">🌡️ 高温自动开空调</button>
+          <button type="button" class="mini-chip" data-vb-tpl="timer_ctrl">⏰ 每天定时控制家电</button>
+        </div>
+        <div class="vb-meta-grid">
+          <div class="field-box" style="margin-bottom:0">
+            <label for="vbAliasInput">自动化中文名称 <span class="field-req-mark">*</span></label>
+            <input type="text" id="vbAliasInput" class="input-clean" placeholder="例如：晚间回家自动开空调与玄关灯" />
+          </div>
+          <div class="field-box" style="margin-bottom:0">
+            <label for="vbAreaSelect">归属房间（可选）</label>
+            <select id="vbAreaSelect" class="select-clean"><option value="">全屋通用</option></select>
+          </div>
+          <div class="field-box" style="margin-bottom:0">
+            <label for="vbModeSelect">并发运行策略</label>
+            <select id="vbModeSelect" class="select-clean">
+              <option value="single">单次执行（防重复触发）</option>
+              <option value="restart">重新触发重置计时</option>
+              <option value="queued">顺序排队执行</option>
+              <option value="parallel">多实例并行执行</option>
+            </select>
+          </div>
+        </div>
+        <div class="vb-stage-box stage-when">
+          <div class="vb-stage-head">
+            <div>
+              <span class="vb-stage-badge badge-when">① 当触发时 (WHEN)</span>
+              <span class="sub-note" style="margin-left:8px">满足以下任一事件即触发</span>
+            </div>
+            <button type="button" class="btn btn-sm" id="btnVbAddTrigger">+ 添加触发事件</button>
+          </div>
+          <div id="vbTriggersList" class="vb-step-list"></div>
+        </div>
+        <div class="vb-flow-connector"><span>▼ 触发后检查限制条件</span></div>
+        <div class="vb-stage-box stage-if">
+          <div class="vb-stage-head">
+            <div>
+              <span class="vb-stage-badge badge-if">② 且同时满足条件 (IF · 可选)</span>
+              <span class="sub-note" style="margin-left:8px">不添加则默认全天候生效</span>
+            </div>
+            <button type="button" class="btn btn-sm" id="btnVbAddCondition">+ 添加时间或状态限制</button>
+          </div>
+          <div id="vbConditionsList" class="vb-step-list"></div>
+        </div>
+        <div class="vb-flow-connector"><span>▼ 条件通过后按顺序执行</span></div>
+        <div class="vb-stage-box stage-then">
+          <div class="vb-stage-head">
+            <div>
+              <span class="vb-stage-badge badge-then">③ 执行动作序列 (THEN)</span>
+              <span class="sub-note" style="margin-left:8px">支持跨品牌设备控制、激活场景与延迟等待</span>
+            </div>
+            <div class="btn-row" style="gap:6px">
+              <button type="button" class="btn btn-sm" id="btnVbAddActDevice">+ 控制设备</button>
+              <button type="button" class="btn btn-sm" id="btnVbAddActScene">+ 激活场景</button>
+              <button type="button" class="btn btn-sm" id="btnVbAddActDelay">+ 延迟等待</button>
+            </div>
+          </div>
+          <div id="vbActionsList" class="vb-step-list"></div>
+        </div>
+        <div class="vb-live-summary" id="vbLiveSummaryBar"></div>
+        <div id="vbErrorBar" class="flow-error-bar hidden" style="margin-top:10px"></div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;flex-wrap:wrap">
+        <button type="button" class="btn" id="btnVbCancel">取消</button>
+        <div class="btn-row">
+          <button type="button" class="btn" id="btnVbSaveDraft" title="发送到 AI 创作台安全草稿卡片预览">生成预览草稿</button>
+          <button type="button" class="btn-primary-grad" id="btnVbSaveDirect">⚡ 校验并立即保存到 HA</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop hidden" id="locationCalibModal" role="dialog" aria-modal="true" aria-labelledby="locModalTitle">
+    <div class="modal-card modal-wide">
+      <div class="modal-header">
+        <div>
+          <h3 id="locModalTitle">📍 中国城市定位与精准日出日落校准</h3>
+          <div class="sub-note">修正 Home Assistant 默认海外坐标与时区偏差，支持高德/百度坐标系自动转为国际 WGS-84</div>
+        </div>
+        <button class="icon-btn" id="btnCloseLocModal" aria-label="关闭定位校准窗口">✕</button>
+      </div>
+      <div class="modal-body" id="locModalBody"></div>
+    </div>
+  </div>
+  <div class="modal-backdrop hidden" id="ecoBridgeModal" role="dialog" aria-modal="true" aria-labelledby="ecoModalTitle">
+    <div class="modal-card modal-wide">
+      <div class="modal-header">
+        <div>
+          <h3 id="ecoModalTitle">跨生态一键桥接向导</h3>
+          <div class="sub-note" id="ecoModalSub">扫码将轻主机全屋跨品牌设备同步至手机原生智能家居 App</div>
+        </div>
+        <button class="icon-btn" id="btnCloseEcoModal" aria-label="关闭跨生态桥接窗口">✕</button>
+      </div>
+      <div class="modal-body" id="ecoModalBody"></div>
+    </div>
+  </div>
+  <div class="modal-backdrop hidden" id="dialogModal" role="dialog" aria-modal="true" aria-labelledby="dialogModalTitle">
+    <div class="modal-card dialog-sm">
+      <div class="modal-header">
+        <h3 id="dialogModalTitle">操作确认</h3>
+        <button class="icon-btn" id="btnCloseDialogModal" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="dialogModalBody"></div>
+      <div class="modal-footer" id="dialogModalFooter"></div>
+    </div>
+  </div>
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="./static/app.js?v=6944702fff"></script>
+</body>
+</html>

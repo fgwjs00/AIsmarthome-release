@@ -1,0 +1,44 @@
+configuration:
+  llm:
+    name: AI Model Settings
+    description: Defaults to Alibaba Cloud Qwen (DashScope OpenAI-compatible API). Can also be updated live from the sidebar UI.
+    fields:
+      provider:
+        name: Model Provider
+        description: Choose qwen, deepseek, doubao, kimi, or custom (any OpenAI-compatible endpoint)
+      base_url:
+        name: Base URL
+        description: Default for Qwen is https://dashscope.aliyuncs.com/compatible-mode/v1
+      api_key:
+        name: API Key
+        description: LLM API key (optional for local custom endpoints such as Ollama)
+      model:
+        name: Model Name
+        description: Recommended qwen-plus or qwen-max for Qwen
+      max_tokens:
+        name: Max Output Tokens
+      top_p:
+        name: Top P
+      temperature:
+        name: Temperature
+      concise_reply:
+        name: Concise Reply Mode
+      history_turns:
+        name: Context History Turns
+  zigbee:
+    name: Zigbee Coordinator Settings
+    description: Automatically detects and supports both ZHA and Zigbee2MQTT across serial/TCP coordinators.
+    fields:
+      stack:
+        name: Preferred Zigbee Stack
+      permit_duration:
+        name: Default Permit Join Duration (s)
+  safety:
+    name: Safety & Confirmation Policy
+    fields:
+      auto_apply_low_risk:
+        name: Auto-apply low-risk actions (toggle, rename, assign room)
+      require_confirm_l2:
+        name: Require draft confirmation before creating/updating scenes & automations
+  log_level:
+    name: Log Level

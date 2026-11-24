@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.so binary
+*.whl binary
+*.png binary
+*.jpg binary
+*.ico binary
+qing_ai_hub/bin/* binary
