@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>轻主机 AI 助手 · 智能家居场景与自动化工作台</title>
-  <link rel="stylesheet" href="./static/styles.css?v=5174997b0c" />
+  <link rel="stylesheet" href="./static/styles.css?v=c079efcea7" />
 </head>
 <body>
   <div class="ambient-canvas" aria-hidden="true">
@@ -23,7 +23,7 @@
           </svg>
         </div>
         <div>
-          <div class="brand-name">轻主机 AI 助手 <span class="design-tag" id="appVersionBadge" title="轻主机 AI 助手当前运行版本号">v0.3.4</span></div>
+          <div class="brand-name">轻主机 AI 助手 <span class="design-tag" id="appVersionBadge" title="轻主机 AI 助手当前运行版本号">v0.3.5</span></div>
           <div class="brand-status">
             <span class="pulse-dot" id="haStatusDot"></span>
             <span id="statusSub">正在连接 Home Assistant...</span>
@@ -55,6 +55,10 @@
         </button>
       </nav>
       <div class="topbar-right">
+        <button class="model-chip" id="btnTopCloud" title="配置云端共用账号与外网远程直连 Home Assistant">
+          <span class="pulse-dot warn" id="cloudTopDot"></span>
+          <span id="cloudTopText">☁️ 远程未绑定</span>
+        </button>
         <button class="model-chip loc-top-chip" id="btnTopLocation" title="点击校准中国城市定位与日出日落时间">
           <span id="topLocText">📍 定位检测中</span>
         </button>
@@ -221,6 +225,29 @@
           </div>
         </div>
         <div id="onboardLocBanner" class="loc-alert-banner hidden"></div>
+        <section class="panel-card cloud-hero-card" style="margin-bottom: 16px;" id="cloudBridgeCard">
+          <div class="panel-head" style="flex-wrap: wrap;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="eco-icon-badge cloud-grad" aria-label="Cloud Remote HA">
+                <svg class="eco-brand-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="panel-title">云端共用账号 & 全平台外网远程直连 HA</h3>
+                <div class="sub-note" id="cloudCardSub">共用 AI 主机云端账号 (cloud.tuojiayi.com)，免公网 IP 在华为/安卓/苹果手机随时远程访问 Home Assistant 场景、自动化与 AI 助手</div>
+              </div>
+            </div>
+            <span class="badge badge-muted" id="cloudCardBadge">未绑定</span>
+          </div>
+          <div class="eco-card-foot">
+            <span class="sub-note" id="cloudCardNote">支持家庭客户与经销商预交付绑定，直连本地 Home Assistant（无需独立 SA 端）</span>
+            <div class="btn-row" style="flex-wrap:wrap">
+              <button class="btn btn-emerald hidden" id="btnQuickOpenRemoteHa">🚀 一键进入远程 HA</button>
+              <button class="btn-primary-grad" id="btnOpenCloudModal">☁️ 登录绑定与远程管理</button>
+            </div>
+          </div>
+        </section>
         <div class="grid-2" style="margin-bottom: 20px;" id="ecoBridgeSection">
           <section class="panel-card eco-bridge-card eco-apple">
             <div class="panel-head" style="flex-wrap: wrap;">
@@ -251,15 +278,15 @@
                   </svg>
                 </div>
                 <div>
-                  <h3 class="panel-title">接入华为「智慧生活」App & 小艺</h3>
-                  <div class="sub-note" id="huaweiBridgeSub">基于标准 Matter 跨生态网桥，自动过滤诊断噪音并生成华为智慧生活扫码二维码</div>
+                  <h3 class="panel-title">华为双向集成 & 通用 Matter 跨生态网桥</h3>
+                  <div class="sub-note" id="huaweiBridgeSub">一键安装华为「智慧生活」双向组件，或生成标准 Matter 网桥码（SmartThings / Google / Alexa）</div>
                 </div>
               </div>
               <span class="badge badge-muted" id="huaweiBridgeBadge">检测中</span>
             </div>
             <div class="eco-card-foot">
-              <span class="sub-note" id="huaweiBridgeCountNote">配合华为 Matter 中枢路由器/音箱局域网扫码直连</span>
-              <button class="btn btn-cyan-accent" id="btnSetupHuaweiBridge">⚡ 一键智能配置华为桥接</button>
+              <span class="sub-note" id="huaweiBridgeCountNote">支持华为设备双向接入与国际标准 Matter 中枢扫码</span>
+              <button class="btn btn-cyan-accent" id="btnSetupHuaweiBridge">⚡ 打开华为与 Matter 向导</button>
             </div>
           </section>
         </div>
@@ -390,7 +417,7 @@
             <h2>AI 引擎配置与时光机回滚</h2>
             <p>短上下文极速编排架构（默认保留最近 3 轮对话 + 实时设备召回快照），修改后毫秒级热生效</p>
           </div>
-          <span class="badge badge-cyan" id="settingsVersionBadge">轻主机 AI 助手 v0.3.4</span>
+          <span class="badge badge-cyan" id="settingsVersionBadge">轻主机 AI 助手 v0.3.5</span>
         </div>
         <div class="grid-2 align-top">
           <section class="panel-card">
@@ -640,6 +667,18 @@
       <div class="modal-body" id="ecoModalBody"></div>
     </div>
   </div>
+  <div class="modal-backdrop hidden" id="cloudRemoteModal" role="dialog" aria-modal="true" aria-labelledby="cloudModalTitle">
+    <div class="modal-card modal-wide">
+      <div class="modal-header">
+        <div>
+          <h3 id="cloudModalTitle">☁️ 云端共用账号与 Home Assistant 远程直连</h3>
+          <div class="sub-note" id="cloudModalSub">共用统一云服务账号与权限体系 · 免公网 IP 安全加密直连本机 Home Assistant（不含冗余 SA 层）</div>
+        </div>
+        <button class="icon-btn" id="btnCloseCloudModal" aria-label="关闭云端远程访问窗口">✕</button>
+      </div>
+      <div class="modal-body" id="cloudModalBody"></div>
+    </div>
+  </div>
   <div class="modal-backdrop hidden" id="dialogModal" role="dialog" aria-modal="true" aria-labelledby="dialogModalTitle">
     <div class="modal-card dialog-sm">
       <div class="modal-header">
@@ -653,6 +692,6 @@
     </div>
   </div>
   <div class="toast-container" id="toastContainer"></div>
-  <script src="./static/app.js?v=6944702fff"></script>
+  <script src="./static/app.js?v=5d2ea61303"></script>
 </body>
 </html>

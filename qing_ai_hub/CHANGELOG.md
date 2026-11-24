@@ -1,5 +1,16 @@
 # 更新日志
 
+## 0.3.5 (2026-11-25)
+- **统一云端账号体系与零公网 IP 远程直连 Home Assistant 隧道（兼容 `https://cloud.tuojiayi.com`）**：
+  - **共用云端账号与角色权限管理 (`connector.py` / `server.py` / `db.py` / `orchestrator.py`)**：
+    - 对接 `POST /v1/auth/login`（家庭客户登录）、`GET /v1/account`（当前账号资料）、`PUT /v1/account/password`（修改密码）、`POST /v1/ops/login`（平台/经销商/运维人员登录）与 `GET /v1/ops/context`（运维角色及经销商成员归属）
+    - 登录态 Bearer 令牌严格仅驻留本地进程内存（前端仅持 `HttpOnly` + `SameSite=Lax` 会话 Cookie，永不落盘或下发浏览器）；对话会话 (`chat_sessions.user_id`) 与安全审计日志统一关联云端 `user_id`，家庭成员 (`member`) 与户主/运维 (`owner`) 权限实时联动安全门禁
+  - **零外部 C 依赖 Ed25519 X.509 证书链校验与直连 HA 加密隧道 (`connector.py` / `config.py`)**：
+    - 内置纯 Python RFC 8032 Ed25519、PKCS#8/SPKI PEM 与 X.509 v3 DER 证书链验证器（无需额外 C 依赖，保持 25 个 `.so` 模块与 100% 离线打包体积）；支持页内一键家庭/经销商交付绑定与 `/bind#<pairing_code>` 扫码绑定
+    - 建立出站 `wss://cloud.tuojiayi.com/v1/gateway/connect` 挑战签名隧道，直接将 `target="ha"` 的 HTTP 与 WebSocket 流量（含 >48KB 大帧自动分片重组）转发至本地 Home Assistant Core（无需独立 SA 中间层）；若在云端门户误点「进入 SA」，自动返回中文引导页提示点击「进入 HA」；收到云端 `revoke` 或 `4401`/`4403` 时立即销毁本地私钥并停止重连
+  - **前端云端远程访问与账号工作台 (`index.html` / `app.js` / `styles.css` / `ecosystem_bridge.py`)**：
+    - 顶栏新增云端状态胶囊按钮，快速接入中心新增「云端统一账号与手机远程访问 HA」卡片与配置弹窗（支持客户/经销商双模式登录、在线改密、一键绑定/解绑、签发单次票据一键外网打开 HA），并更新苹果 HomeKit / 华为生态桥接指引说明
+
 ## 0.3.4 (2026-11-24)
 - **两轮全量深度审查闭环修复与移除虚拟测试沙箱（正式物理设备交付版）**：
   - **彻底移除测试期虚拟沙箱 (`qing_sim_lab` / `sim_tools`)**：删除模拟集成、沙箱工具及前端沙箱控件，成品二进制包实现 **100% 零业务 `.py` 源码文件**；历史旧机若残留空闲 `custom_components/qing_sim_lab` 目录将在启动时自动无感清退

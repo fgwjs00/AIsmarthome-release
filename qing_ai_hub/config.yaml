@@ -1,5 +1,5 @@
 name: "轻主机 AI 助手"
-version: "0.3.4"
+version: "0.3.5"
 slug: "qing_ai_hub"
 description: "全品牌智能家居 AI 场景与自动化创建调试、Zigbee 全协调器兼容与设备快速接入管理助手（默认通义千问）"
 # 正式对外分发时取消下方注释并替换为你们的成品镜像仓库地址（阿里云 ACR / 腾讯云 TCR / 自建 Harbor / GHCR）
@@ -42,6 +42,10 @@ options:
   safety:
     auto_apply_low_risk: true
     require_confirm_l2: true
+  cloud:
+    enabled: false
+    cloud_url: "https://cloud.tuojiayi.com"
+    gateway_label: "轻主机"
   log_level: "info"
 schema:
   llm:
@@ -60,4 +64,8 @@ schema:
   safety:
     auto_apply_low_risk: bool
     require_confirm_l2: bool
+  cloud:
+    enabled: bool
+    cloud_url: "url?"
+    gateway_label: "str?"
   log_level: "list(debug|info|warning|error)"
