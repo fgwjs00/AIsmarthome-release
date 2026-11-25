@@ -1,5 +1,9 @@
 # 更新日志
 
+## 0.3.7 (2026-11-25)
+- **修复 Home Assistant 2026 Supervisor 加载项商店在线构建镜像兼容问题**：
+  - 移除已废弃的 `build.yaml`（原单段镜像名 `"python:3.12-alpine"` 在新版 Supervisor 正则校验下回退至无 Python 的 `ghcr.io/home-assistant/base:latest`，触发 `python3: not found`），改为在 `Dockerfile` 首行直接锁定 HA 官方国内直连多架构基础镜像 `ghcr.io/home-assistant/base-python:3.12-alpine3.21`（不受 `--build-arg BUILD_FROM` 覆盖），并启用 `PIP_BREAK_SYSTEM_PACKAGES=1` 与 `CMD []` 适配 Alpine PEP 668 与 `qing-launcher` 守护入口
+
 ## 0.3.6 (2026-11-25)
 - **全量兼容原 SA 统一云端体系（云端零改动，双通道直达 + 家庭端接口兼容）**：
   - **「进入 SA」直达轻主机 AI 助手界面 (`connector.py` / `server.py` / `app.js` / `index.html`)**：

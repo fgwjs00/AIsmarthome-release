@@ -2,9 +2,9 @@
 
 面向 **PK3566 / RK3566 (`aarch64`) Home Assistant OS 主机** 的全品牌智能家居 AI 助手成品加载项（Add-on）发布仓。
 
-- **当前版本**：`v0.3.6`
+- **当前版本**：`v0.3.7`
 - **目标架构**：`aarch64` (`linux/arm64`)
-- **交付形态**：零源码原生二进制成品包（Rust `qing-launcher` 守护外壳 + 25 个脱符号 Cython `.so` 原生模块 + 前端混淆压缩 + 内置全量离线 Python 依赖包，支持无外网纯离线安装构建，开箱免激活直接运行，全量兼容 `cloud.tuojiayi.com` 统一云端：「进入 HA」直达 HA，「进入 SA」直达轻主机 AI 助手）
+- **交付形态**：零源码原生二进制成品包（Rust `qing-launcher` 守护外壳 + 25 个脱符号 Cython `.so` 原生模块 + 前端混淆压缩 + 内置全量离线 Python 依赖包，原生兼容 Home Assistant 2026+ Supervisor 加载项商店一键安装更新，全量兼容 `cloud.tuojiayi.com` 统一云端：「进入 HA」直达 HA，「进入 SA」直达轻主机 AI 助手）
 
 ---
 
