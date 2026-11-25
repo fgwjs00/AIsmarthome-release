@@ -1,5 +1,14 @@
 # 更新日志
 
+## 0.3.6 (2026-11-25)
+- **全量兼容原 SA 统一云端体系（云端零改动，双通道直达 + 家庭端接口兼容）**：
+  - **「进入 SA」直达轻主机 AI 助手界面 (`connector.py` / `server.py` / `app.js` / `index.html`)**：
+    - 云端门户 (`https://cloud.tuojiayi.com/customer` 与 `/maintenance`) 点击 **「进入 HA」** (`target="ha"`) 直达本机 Home Assistant (`:8123`)；点击 **「进入 SA」** (`target="sa"`, `https://sa-<public_id>.<support_domain>/`) 通过进程级一次性随机隧道令牌 (`X-Qing-Tunnel-Token`) 直达本机「轻主机 AI 助手」工作台 (`:8099`)，同时支持 HTTP、长连接 SSE (`/api/v1/events`、`/api/v1/chat`) 与 WebSocket，无需先登录 HA 即可在外网直接使用 AI 助手
+    - 本地云端管理弹窗同步提供 **「远程进入 HA」** 与 **「远程进入 AI 助手 (SA)」** 双通道一键新窗口启动按钮
+  - **100% 兼容 SA 云端家庭端远程中继协议 (`type="request"` / `policy.py` 白名单)**：
+    - 完整实现并对齐原 SA 家庭端契约白名单接口：`GET /api/v1/dashboard/summary`、`GET /api/v1/system/status`、`GET /api/v1/devices`（含 `projection=device_directory.v1` / `device_detail.v1` 与 `action_descriptors`）、`GET /api/v1/rooms`、`GET /api/v1/ai-scenes`、`POST /api/v1/ai-scenes/{scene_id}/trigger`（严格限定 `scene` 域并记录审计日志）、`GET /api/v1/events/recent` 与 `GET /api/v1/energy`，本地二次执行请求体 64 KiB、响应体预算与并发读限流校验，拒绝一切越界路径
+    - 同时兼容 `/remote-gateway/{status,pairing/start,pairing/poll,revoke-local}` 原生本地配对接口与页内一键绑定 / `/bind#<pairing_code>` 扫码双绑定路径
+
 ## 0.3.5 (2026-11-25)
 - **统一云端账号体系与零公网 IP 远程直连 Home Assistant 隧道（兼容 `https://cloud.tuojiayi.com`）**：
   - **共用云端账号与角色权限管理 (`connector.py` / `server.py` / `db.py` / `orchestrator.py`)**：

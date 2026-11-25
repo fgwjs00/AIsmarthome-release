@@ -23,7 +23,7 @@
           </svg>
         </div>
         <div>
-          <div class="brand-name">轻主机 AI 助手 <span class="design-tag" id="appVersionBadge" title="轻主机 AI 助手当前运行版本号">v0.3.5</span></div>
+          <div class="brand-name">轻主机 AI 助手 <span class="design-tag" id="appVersionBadge" title="轻主机 AI 助手当前运行版本号">v0.3.6</span></div>
           <div class="brand-status">
             <span class="pulse-dot" id="haStatusDot"></span>
             <span id="statusSub">正在连接 Home Assistant...</span>
@@ -234,14 +234,14 @@
                 </svg>
               </div>
               <div>
-                <h3 class="panel-title">云端共用账号 & 全平台外网远程直连 HA</h3>
-                <div class="sub-note" id="cloudCardSub">共用 AI 主机云端账号 (cloud.tuojiayi.com)，免公网 IP 在华为/安卓/苹果手机随时远程访问 Home Assistant 场景、自动化与 AI 助手</div>
+                <h3 class="panel-title">统一云端共用账号 & 外网远程直连（HA + 轻主机 AI 助手）</h3>
+                <div class="sub-note" id="cloudCardSub">完全兼容原 SA 云端 (cloud.tuojiayi.com)：云端点击「进入 HA」直达 Home Assistant，点击「进入 SA」直达轻主机 AI 助手</div>
               </div>
             </div>
             <span class="badge badge-muted" id="cloudCardBadge">未绑定</span>
           </div>
           <div class="eco-card-foot">
-            <span class="sub-note" id="cloudCardNote">支持家庭客户与经销商预交付绑定，直连本地 Home Assistant（无需独立 SA 端）</span>
+            <span class="sub-note" id="cloudCardNote">共用一套云端账号、家庭与经销商交付体系，同时支持页内一键绑定与网页扫码绑定</span>
             <div class="btn-row" style="flex-wrap:wrap">
               <button class="btn btn-emerald hidden" id="btnQuickOpenRemoteHa">🚀 一键进入远程 HA</button>
               <button class="btn-primary-grad" id="btnOpenCloudModal">☁️ 登录绑定与远程管理</button>
@@ -417,7 +417,7 @@
             <h2>AI 引擎配置与时光机回滚</h2>
             <p>短上下文极速编排架构（默认保留最近 3 轮对话 + 实时设备召回快照），修改后毫秒级热生效</p>
           </div>
-          <span class="badge badge-cyan" id="settingsVersionBadge">轻主机 AI 助手 v0.3.5</span>
+          <span class="badge badge-cyan" id="settingsVersionBadge">轻主机 AI 助手 v0.3.6</span>
         </div>
         <div class="grid-2 align-top">
           <section class="panel-card">
@@ -671,8 +671,8 @@
     <div class="modal-card modal-wide">
       <div class="modal-header">
         <div>
-          <h3 id="cloudModalTitle">☁️ 云端共用账号与 Home Assistant 远程直连</h3>
-          <div class="sub-note" id="cloudModalSub">共用统一云服务账号与权限体系 · 免公网 IP 安全加密直连本机 Home Assistant（不含冗余 SA 层）</div>
+          <h3 id="cloudModalTitle">☁️ 统一云端账号与远程访问管理</h3>
+          <div class="sub-note" id="cloudModalSub">全量兼容原 SA 云端体系 (cloud.tuojiayi.com) · 支持「进入 HA」与「进入 SA (轻主机 AI 助手)」双通道加密直连</div>
         </div>
         <button class="icon-btn" id="btnCloseCloudModal" aria-label="关闭云端远程访问窗口">✕</button>
       </div>
@@ -692,6 +692,6 @@
     </div>
   </div>
   <div class="toast-container" id="toastContainer"></div>
-  <script src="./static/app.js?v=5d2ea61303"></script>
+  <script src="./static/app.js?v=9a2edab263"></script>
 </body>
 </html>

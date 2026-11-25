@@ -1,6 +1,6 @@
 ARG BUILD_FROM="python:3.12-alpine"
 FROM ${BUILD_FROM}
-ARG BUILD_VERSION="0.3.5"
+ARG BUILD_VERSION="0.3.6"
 ARG BUILD_ARCH
 
 LABEL org.opencontainers.image.title="轻主机 AI 助手" \
