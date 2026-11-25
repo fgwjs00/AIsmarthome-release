@@ -1,5 +1,0 @@
-aiohttp>=3.9.0,<4.0.0
-PyYAML>=6.0.1,<7.0.0
-pypinyin>=0.51.0,<1.0.0
-rapidfuzz>=3.6.0,<4.0.0; platform_machine == "aarch64" or platform_machine == "x86_64" or platform_machine == "AMD64"
-paho-mqtt>=2.0.0,<3.0.0

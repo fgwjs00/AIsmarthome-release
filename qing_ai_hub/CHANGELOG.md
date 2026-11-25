@@ -1,5 +1,12 @@
 # 更新日志
 
+## 0.3.10 (2026-11-26)
+- **华为鸿蒙智家反向网桥大快照缓冲与真实 C SDK 深度适配 + 阿里云杭州 ACR 极速预构建分发**：
+  - **修复多设备环境下子进程 `Separator is not found, and chunk exceed the limit` 崩溃 (`huawei_bridge.py` / `huawei_bridge_worker.py`)**：将主子进程 JSON-Lines IPC 管道缓冲上限从默认 `64 KiB` 提升至 `32 MiB`，支持数千个 HA 实体全量快照秒级同步
+  - **深度对齐上游 `ha_hwhomebridge` `v1.0.0` 原生 API (`huawei_bridge_worker.py`)**：内置零外部依赖 `aiofiles` / `psutil` / `homeassistant.config_entries` / `er.async_entries_for_device` 兼容层，真实调用 `start_hw_hilink_bridge` 与 `PINManager.generate_pin()` 联动 C 侧 `OnPINQueryCB` 回调校验，自动为无 `device_id` 的独立灯具/开关/风扇合成虚拟设备并实时回传已注册设备数与绑定状态
+  - **修复 HA 配置/选项向导 `[value, label]` 二元组下拉框参数校验报错 (`onboarding_tools.py` / `app.js`)**：兼容 `vol.In({...})` 序列化出的二元数组选项，消除 `['pin_binding', 'PIN绑定']` 格式报错
+  - **切换阿里云杭州公开 ACR 预构建镜像分发**：国内轻主机安装与更新无需现场构建或跨境拉取底座，10 秒直拉完成
+
 ## 0.3.9 (2026-11-25)
 - **轻主机 Debian 原生 `glibc` 底座升级、内置独立子进程华为桥接引擎与远程隧道并发修复**：
   - **轻主机容器升级为 Debian 12 Bookworm (`Dockerfile` / `tools/export_binary_addon.py`)**：彻底解决 HAOS Alpine (`musl`) 缺少 `ld-linux-aarch64.so.1` 导致华为 `libhilink_bridge.so` 无法加载的问题
