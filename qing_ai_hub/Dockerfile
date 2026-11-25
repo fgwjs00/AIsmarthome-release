@@ -1,6 +1,6 @@
-FROM ghcr.io/home-assistant/base-python:3.12-alpine3.21
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 ARG BUILD_FROM
-ARG BUILD_VERSION="0.3.7"
+ARG BUILD_VERSION="0.3.9"
 ARG BUILD_ARCH
 
 LABEL org.opencontainers.image.title="轻主机 AI 助手" \

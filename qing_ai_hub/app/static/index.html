@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>轻主机 AI 助手 · 智能家居场景与自动化工作台</title>
-  <link rel="stylesheet" href="./static/styles.css?v=c079efcea7" />
+  <link rel="stylesheet" href="./static/styles.css?v=5a8b96b7ec" />
 </head>
 <body>
   <div class="ambient-canvas" aria-hidden="true">
@@ -23,7 +23,7 @@
           </svg>
         </div>
         <div>
-          <div class="brand-name">轻主机 AI 助手 <span class="design-tag" id="appVersionBadge" title="轻主机 AI 助手当前运行版本号">v0.3.7</span></div>
+          <div class="brand-name">轻主机 AI 助手 <span class="design-tag" id="appVersionBadge" title="轻主机 AI 助手当前运行版本号">v0.3.9</span></div>
           <div class="brand-status">
             <span class="pulse-dot" id="haStatusDot"></span>
             <span id="statusSub">正在连接 Home Assistant...</span>
@@ -278,15 +278,15 @@
                   </svg>
                 </div>
                 <div>
-                  <h3 class="panel-title">华为双向集成 & 通用 Matter 跨生态网桥</h3>
-                  <div class="sub-note" id="huaweiBridgeSub">一键安装华为「智慧生活」双向组件，或生成标准 Matter 网桥码（SmartThings / Google / Alexa）</div>
+                  <h3 class="panel-title">接入华为「智慧生活」App & 小艺（双向同步）</h3>
+                  <div class="sub-note" id="huaweiBridgeSub">一键安装华为设备同步 (huawei_smarthome) 与鸿蒙智家反向网桥 (hwhomebridge)，实现华为设备与轻主机双向互通</div>
                 </div>
               </div>
-              <span class="badge badge-muted" id="huaweiBridgeBadge">检测中</span>
+              <span class="badge badge-cyan" id="huaweiBridgeBadge">双向集成</span>
             </div>
             <div class="eco-card-foot">
-              <span class="sub-note" id="huaweiBridgeCountNote">支持华为设备双向接入与国际标准 Matter 中枢扫码</span>
-              <button class="btn btn-cyan-accent" id="btnSetupHuaweiBridge">⚡ 打开华为与 Matter 向导</button>
+              <span class="sub-note" id="huaweiBridgeCountNote">支持将华为设备同步到轻主机，并将全屋设备推送给华为智慧生活与小艺</span>
+              <button class="btn btn-cyan-accent" id="btnSetupHuaweiBridge">⚡ 打开华为双向接入向导</button>
             </div>
           </section>
         </div>
@@ -417,7 +417,7 @@
             <h2>AI 引擎配置与时光机回滚</h2>
             <p>短上下文极速编排架构（默认保留最近 3 轮对话 + 实时设备召回快照），修改后毫秒级热生效</p>
           </div>
-          <span class="badge badge-cyan" id="settingsVersionBadge">轻主机 AI 助手 v0.3.7</span>
+          <span class="badge badge-cyan" id="settingsVersionBadge">轻主机 AI 助手 v0.3.9</span>
         </div>
         <div class="grid-2 align-top">
           <section class="panel-card">
@@ -692,6 +692,6 @@
     </div>
   </div>
   <div class="toast-container" id="toastContainer"></div>
-  <script src="./static/app.js?v=9a2edab263"></script>
+  <script src="./static/app.js?v=a6a23324ee"></script>
 </body>
 </html>

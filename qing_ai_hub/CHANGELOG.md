@@ -1,5 +1,17 @@
 # 更新日志
 
+## 0.3.9 (2026-11-25)
+- **轻主机 Debian 原生 `glibc` 底座升级、内置独立子进程华为桥接引擎与远程隧道并发修复**：
+  - **轻主机容器升级为 Debian 12 Bookworm (`Dockerfile` / `tools/export_binary_addon.py`)**：彻底解决 HAOS Alpine (`musl`) 缺少 `ld-linux-aarch64.so.1` 导致华为 `libhilink_bridge.so` 无法加载的问题
+  - **内置独立子进程华为鸿蒙智家反向网桥 (`huawei_bridge.py` / `huawei_bridge_worker.py` / `location_ecosystem_tools.py` / `app.js`)**：驱动热更新目录 (`/data/huawei_bridge/driver`) 与配对凭证目录 (`/data/huawei_bridge/storage`) 彻底解耦，支持无需重启 HA Core 的一键下载/在线热更新、8 位 PIN 码获取、网卡自检与实时子进程日志
+  - **修复 HA 远程页面 HTTP 与 WebSocket 并发配额冲突 (`bf3fac3`)**：解决远程访问 HA 首页资源间歇性 503 问题
+  - **修复 HomeKit 二维码拉取触发 Supervisor 认证刷屏报错 (`ecosystem_bridge.py`)**：优先使用本地离线 `X-HM://` 渲染并绕过 `supervisor/core` 代理直连本机 `127.0.0.1:8123`
+
+## 0.3.8 (2026-11-25)
+- **华为「智慧生活」& 鸿蒙智家双向同步向导增强与双仓（Gitee + GitHub）同步发布**：
+  - **支持 Options Flow 自动接续与翻译 (`client.py` / `onboarding_tools.py` / `app.js` / `index.html`)**：针对已接入的单实例集成（如 `hwhomebridge` 鸿蒙智家反向网桥与 `huawei_smarthome` 华为设备同步组件返回 `single_instance_allowed` / `already_configured`），点击配置自动无缝拉起其 `Options Flow`（实体勾同步与 PIN 绑定向导），并同步加载 `options` 中文翻译词典
+  - **组件下载多分支镜像容错与 HA 重启友好提示 (`installer.py` / `onboarding_tools.py`)**：补齐 `ghfast` / `gh-proxy` 的 `HEAD`、`main`、`master` 多分支归档回退通道；当 HA Core 正在重启或后台安装组件 Python 依赖返回 `502/503` 时给出清晰的中文等待指引
+
 ## 0.3.7 (2026-11-25)
 - **修复 Home Assistant 2026 Supervisor 加载项商店在线构建镜像兼容问题**：
   - 移除已废弃的 `build.yaml`（原单段镜像名 `"python:3.12-alpine"` 在新版 Supervisor 正则校验下回退至无 Python 的 `ghcr.io/home-assistant/base:latest`，触发 `python3: not found`），改为在 `Dockerfile` 首行直接锁定 HA 官方国内直连多架构基础镜像 `ghcr.io/home-assistant/base-python:3.12-alpine3.21`（不受 `--build-arg BUILD_FROM` 覆盖），并启用 `PIP_BREAK_SYSTEM_PACKAGES=1` 与 `CMD []` 适配 Alpine PEP 668 与 `qing-launcher` 守护入口
