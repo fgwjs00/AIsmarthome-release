@@ -1,10 +1,10 @@
 # 轻主机 AI 助手 (`qing_ai_hub`) — 官方发布仓库
 
-面向 **PK3566 / RK3566 (`aarch64`) Home Assistant OS 主机** 的全品牌智能家居 AI 助手成品加载项（Add-on）发布仓。
+面向 **ARM64 轻主机 (`aarch64`，如 PK3566 / RK3566)** 与 **X86_64 主机 (`amd64`，如 Intel N100/J4125 迷你主机、软路由、NAS、PVE/VMware/Unraid HAOS 虚拟机)** 双架构的全品牌智能家居 AI 助手成品加载项（Add-on）发布仓。
 
-- **当前版本**：`v0.3.13`
-- **目标架构**：`aarch64` (`linux/arm64`，Debian 12 原生 `glibc` 底座，阿里云杭州公开 ACR 国内千兆直拉)
-- **交付形态**：零源码原生二进制成品包（Rust `qing-launcher` 守护外壳 + 27 个脱符号 Cython `.so` 原生模块 + 内置子进程隔离华为鸿蒙智家反向网桥引擎 + 前端混淆压缩 + 内置全量离线 Python 依赖包，原生兼容 Home Assistant 2026+ Supervisor 加载项商店一键安装更新，全量兼容 `cloud.tuojiayi.com` 统一云端：「进入 HA」直达 HA，「进入 SA」直达轻主机 AI 助手）
+- **当前版本**：`v0.3.14`
+- **支持架构**：`aarch64` (`linux/arm64`) + `amd64` (`linux/amd64`) —— **同一个仓库地址一键安装，Home Assistant 自动识别宿主机 CPU 架构**（Debian 12 原生 `glibc` 底座，阿里云杭州公开 ACR 国内千兆直拉）
+- **交付形态**：零源码原生二进制成品包（Rust `qing-launcher` 守护外壳 + 27 个脱符号 Cython `.so` 原生模块 + 内置子进程隔离华为鸿蒙智家反向网桥引擎及 X86 网卡自动桥接垫片 + 前端混淆压缩 + 内置全量离线 Python 依赖包，原生兼容 Home Assistant 2026+ Supervisor 加载项商店一键安装更新，全量兼容 `cloud.tuojiayi.com` 统一云端：「进入 HA」直达 HA，「进入 SA」直达轻主机 AI 助手）
 
 ---
 

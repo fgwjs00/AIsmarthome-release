@@ -1,6 +1,6 @@
 # 轻主机 AI 助手使用说明
 
-本插件为 PK3566 / Home Assistant OS 打造的全品牌 AI 智能家居助手。
+本插件支持 **ARM64 (`aarch64`，如 PK3566 轻主机)** 与 **X86_64 (`amd64`，如 Intel N100/J4125 迷你主机、NAS、PVE/VMware/Unraid HAOS)** 双架构，是为 Home Assistant OS 打造的全品牌 AI 智能家居助手。
 
 ## 快速开始
 

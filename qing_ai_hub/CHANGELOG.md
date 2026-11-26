@@ -1,8 +1,15 @@
 # 更新日志
 
+## 0.3.14 (2026-11-26)
+- **全面新增 X86_64 (`amd64`) 架构原生支持（覆盖 Intel N100/J4125 迷你主机、软路由、NAS 与 PVE/VMware/Unraid HAOS 虚拟机）**：
+  - **华为「智慧生活」& 小艺引擎 X86 网卡自动桥接垫片 (`native/netshim.c` / `huawei_bridge.py` / `huawei_bridge_worker.py` / `Dockerfile`)**：内置原生 `libqing_netshim.so` 用户态兼容垫片，在采用可预测网卡命名（`enp*` / `eno*` / `ens*`）而无 `eth0` 的 X86 HAOS 主机上自动将活动局域网网卡无感映射为 `eth0`（无需宿主机手动创建 `macvlan`），同时校验 64 位 ELF `e_machine` 杜绝 `amd64`/`aarch64` 跨架构 `.so` 误加载
+  - **Rust 安全壳 `qing-launcher` X86 物理机与虚拟机指纹增强 (`fingerprint.rs`)**：过滤 AMI/OEM 主板常见未烧录占位 UUID（`Default string` / `To be filled by O.E.M.` / `03000200-...`），新增主板 `board_serial` 与 NVMe 硬盘序列号回退采集，并兼容 PVE/VMware/Hyper-V 虚拟化网卡 `NET_ADDR_SET` 固定 MAC（不影响既有 ARM64 设备机器码）
+  - **X86 虚拟空壳串口去噪与双架构构建导出工具链升级 (`zigbee.py` / `build_release.ps1` / `export_binary_addon.py`)**：自动过滤 X86 Linux 内核默认暴露的 32 个 `platform/serial8250` 空壳 `/dev/ttyS*` 槽位；支持 `build_release.ps1 -Arch amd64|arm64|all` 与 `export_binary_addon.py --platform linux/amd64` 一键构建导出 X86 商业零源码安装包
+
 ## 0.3.13 (2026-11-26)
 - **修复「华为智慧生活设备同步 (`huawei_smarthome`)」组件下载 `HTTP 404` 问题 (`installer.py`)**：
   - 原社区仓库 `xiasi0/ha-huawei-smarthome` 已下线迁移，现已切换至最新活跃维护源 `duanyudan86/ha-huawei-smarthome`（`v2026.11.15`），并内置 `kosmo888/ha-huawei-smarthome`、`lwd333/ha-huawei-smarthome` 多仓库自动故障转移兜底
+- **保留 Web UI 云端远程隧道开关与自定义主机名 (`config.py`)**：升级加载项或在 Supervisor 配置页修改其他项时，不再被默认 `options.json` 静默重置已绑定的云端远程开关与名称
 
 ## 0.3.12 (2026-11-26)
 - **华为「智慧生活」& 小艺墙壁开关灯控（一开/二开/三开/四开）逐路拆分与灯具映射**：
