@@ -1,5 +1,5 @@
 name: "轻主机 AI 助手"
-version: "0.3.11"
+version: "0.3.12"
 slug: "qing_ai_hub"
 description: "全品牌智能家居 AI 场景与自动化创建调试、Zigbee 全协调器兼容与设备快速接入管理助手（默认通义千问）"
 # 预构建商业二进制镜像（阿里云杭州 ACR 国内高速直拉，免主机现场构建）
