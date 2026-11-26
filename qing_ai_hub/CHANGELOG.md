@@ -1,5 +1,12 @@
 # 更新日志
 
+## 0.3.15 (2026-11-27)
+- **内置「Zigbee2MQTT 未适配设备 (`Unsupported`) 一键智能适配舱」(`z2m_converter.py` / `onboarding_tools.py` / `app.js`)**：
+  - **自动扫描与硬件簇诊断**：自动解析 Z2M `database.db` 与 MQTT `bridge/devices`，精准提取未适配设备的 `modelID`、`manufacturerName`、端点数量与 ZCL 底层簇（`genOnOff` / `lightingColorCtrl` / `closuresWindowCovering` / `ssIasZone` / 涂鸦 `0xEF00`），并在快速配网页实时提示未适配数量
+  - **双引擎零代码生成外部转换器 (`.mjs` / `.js`)**：内置 20 类高频标准簇与涂鸦 `TS0601` 品类模板（覆盖单开/多开墙壁开关、计量插座、调光彩光灯、窗帘电机、温湿度/水浸/门磁传感器、毫米波人体存在雷达、地暖温控器），同时支持结合 DP 点说明调用 AI 定制生成，并通过严格 Node.js 安全沙箱语法校验
+  - **一键热挂载与随时回退**：自动写入 `external_converters/` 并通过 `zigbee2mqtt/bridge/request/converter/save` 热挂载及重新触发设备 Interview（兼容 Z2M 2.x 与 1.x），支持随时查看与一键卸载
+- **Zigbee2MQTT 未启动入网自动拉起与在线桥接校验 (`zigbee.py`)**：避免残留离线实体导致误判运行态，并在用户点击添加子设备时自动拉起已配置但未运行的 Z2M 加载项
+
 ## 0.3.14 (2026-11-26)
 - **全面新增 X86_64 (`amd64`) 架构原生支持（覆盖 Intel N100/J4125 迷你主机、软路由、NAS 与 PVE/VMware/Unraid HAOS 虚拟机）**：
   - **华为「智慧生活」& 小艺引擎 X86 网卡自动桥接垫片 (`native/netshim.c` / `huawei_bridge.py` / `huawei_bridge_worker.py` / `Dockerfile`)**：内置原生 `libqing_netshim.so` 用户态兼容垫片，在采用可预测网卡命名（`enp*` / `eno*` / `ens*`）而无 `eth0` 的 X86 HAOS 主机上自动将活动局域网网卡无感映射为 `eth0`（无需宿主机手动创建 `macvlan`），同时校验 64 位 ELF `e_machine` 杜绝 `amd64`/`aarch64` 跨架构 `.so` 误加载
