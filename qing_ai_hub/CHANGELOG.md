@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.3.17 (2026-11-27)
+- **欧瑞博 / 多端点 Matter 网桥场景自动走 HA 串行脚本 (`script.ai_scene_*`) 替代原生并发 `scene.*` (`gate.py` / `scene_tools.py` / `server.py` / `huawei_bridge_worker.py` / `app.js`)**：
+  - **彻底根治 Matter Server 9.x 并发 `commandRef` 导致的 `No command response (code 204)`**：新建或实景抓拍场景时，若检测到包含 ≥ 2 台 Matter 设备（如欧瑞博 MatterBridge 多路灯具），自动在 HA 侧编译为带 `80ms` 间隔与 `continue_on_error: true` 的串行脚本 (`script.ai_scene_*`)，并自动绑定房间归属与别名，无论在 HA 原生界面、AI 工作台、SA 云端还是华为智慧生活/小艺触发均 100% 稳定成功
+  - **自动化多灯动作自动拆分串行**：在自动化中若单条动作同时下发 ≥ 2 台 Matter 设备（`target.entity_id: [...]`）或连续下发多条 Matter 动作，自动拆分为带 `80ms` 间隔的逐条串行步骤；历史旧原生 Matter `scene.*` 激活时亦主动切换串行下发不再触发并发报错
+  - **全链路透明管理**：`list_scenes`、`get_scene`、`update_scene`、`test_scene`（现场试光微调）、`activate_scene`、`delete_scene`、SA `/api/v1/ai-scenes` 及华为智慧生活点动开关同步均无缝兼容 `script.ai_scene_*`，并在场景卡片标注「串行防204」标识
+
 ## 0.3.16 (2026-11-27)
 - **Zigbee2MQTT 外部转换器深度升级与涂鸦 `TS0726` 复合开关面板适配 (`z2m_converter.py` / `onboarding_tools.py` / `app.js`)**：
   - **全面兼容 Z2M 2.11+ (`2.14.3`) 外部转换器加载机制**：彻底移除无法解析容器内依赖的 `createRequire(import.meta.url)`，全面改为原生 ES Module 静态 `import`；在「Z2M 未适配修复」弹窗顶部新增 **「⚡ 一键开启/关闭 `advanced.enable_external_js`」** 总开关按钮，下发转换器时亦自动写入开启并平滑重启生效
