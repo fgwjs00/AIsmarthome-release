@@ -1,11 +1,22 @@
 # 更新日志
 
+## 0.3.16 (2026-11-27)
+- **Zigbee2MQTT 外部转换器深度升级与涂鸦 `TS0726` 复合开关面板适配 (`z2m_converter.py` / `onboarding_tools.py` / `app.js`)**：
+  - **全面兼容 Z2M 2.11+ (`2.14.3`) 外部转换器加载机制**：彻底移除无法解析容器内依赖的 `createRequire(import.meta.url)`，全面改为原生 ES Module 静态 `import`；在「Z2M 未适配修复」弹窗顶部新增 **「⚡ 一键开启/关闭 `advanced.enable_external_js`」** 总开关按钮，下发转换器时亦自动写入开启并平滑重启生效
+  - **新增涂鸦 `TS0726` 复合开关面板专用模板并修复多键全路联动串控**：支持 4 路继电器 + 2 路无线情景键（如 `_TZ3000_lnzln0v5`）及所有涂鸦 `_TZ3000_*`/`TS000x` 多键开关，完整内置 `tzOnOffScoped`（拦截无端点全局 `state` 写入防全开全关）、`tuya.modernExtend.tuyaBase()`、`tuya.modernExtend.tuyaOnOff({ switchMode: true, powerOnBehavior2: true })`、`commandTuyaAction`/`raw` 情景按键解析与 `tuya.configureMagicPacket` + 逐端点 `reporting.bind`
+- **Zigbee 网关自动识别、配网自动拉起 Z2M、冲突一键修复与实时入网雷达 (`zigbee.py` / `onboarding_tools.py` / `app.js` / `index.html` / `styles.css`)**：
+  - 修复端口 `6638`（XZG / SLZB-06 / TI CC2652P）驱动误判为 `ember` 的问题，新增主动 TCP 协议探测（Z-Stack `SYS_PING` / EZSP `ASH RST`）与 mDNS/`configuration_url` 地址解析
+  - 已绑定协调器与新发现协调器彻底去重区分，右侧「Matter 配对 & 局域网自动发现」不再混入 `zha` 协调器
+  - 修复 Z2M 停止时被 HA 残留 MQTT 实体误判为运行中的问题；点击「开启 120s 入网」时自动拉起已配置的 Mosquitto & Z2M 并确认就绪；新增 Z2M `configuration-adapter mismatch` 启动崩溃自动诊断与一键修复
+  - 入网雷达新增 SSE (`pairing.started`/`progress`/`finished`) + 4 秒兜底轮询实时刷新，无需手动刷新页面即可看到新入网设备，并改版为固定高度可滚动的多列紧凑卡片布局
+- **欧瑞博 MatterBridge 房间智能同步与场景弹性容错 (`engine.py` / `gate.py` / `db.py` / `huawei_bridge.py` / `device_tools.py`)**：
+  - 支持实体级房间归属同步与 Matter 桥接设备房间名称自动推断，增强场景调用对 HTTP 204 的容错与安全门禁处理
+
 ## 0.3.15 (2026-11-27)
 - **内置「Zigbee2MQTT 未适配设备 (`Unsupported`) 一键智能适配舱」(`z2m_converter.py` / `onboarding_tools.py` / `app.js`)**：
   - **自动扫描与硬件簇诊断**：自动解析 Z2M `database.db` 与 MQTT `bridge/devices`，精准提取未适配设备的 `modelID`、`manufacturerName`、端点数量与 ZCL 底层簇（`genOnOff` / `lightingColorCtrl` / `closuresWindowCovering` / `ssIasZone` / 涂鸦 `0xEF00`），并在快速配网页实时提示未适配数量
   - **双引擎零代码生成外部转换器 (`.mjs` / `.js`)**：内置 20 类高频标准簇与涂鸦 `TS0601` 品类模板（覆盖单开/多开墙壁开关、计量插座、调光彩光灯、窗帘电机、温湿度/水浸/门磁传感器、毫米波人体存在雷达、地暖温控器），同时支持结合 DP 点说明调用 AI 定制生成，并通过严格 Node.js 安全沙箱语法校验
   - **一键热挂载与随时回退**：自动写入 `external_converters/` 并通过 `zigbee2mqtt/bridge/request/converter/save` 热挂载及重新触发设备 Interview（兼容 Z2M 2.x 与 1.x），支持随时查看与一键卸载
-- **Zigbee2MQTT 未启动入网自动拉起与在线桥接校验 (`zigbee.py`)**：避免残留离线实体导致误判运行态，并在用户点击添加子设备时自动拉起已配置但未运行的 Z2M 加载项
 
 ## 0.3.14 (2026-11-26)
 - **全面新增 X86_64 (`amd64`) 架构原生支持（覆盖 Intel N100/J4125 迷你主机、软路由、NAS 与 PVE/VMware/Unraid HAOS 虚拟机）**：
