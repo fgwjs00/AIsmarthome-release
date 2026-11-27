@@ -1,5 +1,13 @@
 # 更新日志
 
+## 0.3.18 (2026-11-28)
+- **彻底解决更新 / 重启 / 重装加载项后需重新登录配置云端远程访问的问题 (`connector.py` / `config.py` / `app.js`)**：
+  - **云端浏览器登录态持久化 (`sessions_cache.json`, `0600`)**：原本云端账号会话 (`qing_cloud_sid`) 仅保存在容器内存中，每次更新加载项重启容器都会清空登录态导致「一键进入远程 HA」消失并重新弹出登录表单；现已加密落盘并延长有效期至 30 天，更新/重启后保持无感已登录状态
+  - **已绑定主机自动自愈启用隧道 (`user_paused` 显式暂停区分)**：只要本地存在合法的已配对 Ed25519 设备证书 (`pairing_state == "paired"`) 且用户未手动关闭隧道开关，启动时无视 Supervisor `options.json` 默认 `cloud.enabled: false` 覆盖自动恢复启用远程直连隧道
+  - **跨卸载重装双保险备份 (`/homeassistant/.storage/qing_ai_hub_persist`)**：在 HAOS Supervisor 环境下自动将 `remote_gateway` 设备证书与 `runtime_settings.json` 镜像备份至 HA 持久存储区，即使通过「卸载再重装」方式升级加载项也能在首次启动时 100% 自动无感恢复（主动点击「解绑注销本机」或云端吊销时同步彻底销毁备份）
+  - **已绑定状态 UI 引导优化**：主机在线时卡片按钮更新为「☁️ 远程连接管理 (已绑定)」，未登录新浏览器访问时折叠可选登录框并默认匹配已绑定账号类型（家庭客户 / 经销商运维）
+- **新增轻主机官方高清品牌图标 (`icon.png` + `logo.png`)**：为 Home Assistant 加载项商店列表页与加载项详情页同步配备圆角流光科技蓝紫渐变高清图标与横幅徽标，完美适配 HA 浅色与深色主题
+
 ## 0.3.17 (2026-11-27)
 - **欧瑞博 / 多端点 Matter 网桥场景自动走 HA 串行脚本 (`script.ai_scene_*`) 替代原生并发 `scene.*` (`gate.py` / `scene_tools.py` / `server.py` / `huawei_bridge_worker.py` / `app.js`)**：
   - **彻底根治 Matter Server 9.x 并发 `commandRef` 导致的 `No command response (code 204)`**：新建或实景抓拍场景时，若检测到包含 ≥ 2 台 Matter 设备（如欧瑞博 MatterBridge 多路灯具），自动在 HA 侧编译为带 `80ms` 间隔与 `continue_on_error: true` 的串行脚本 (`script.ai_scene_*`)，并自动绑定房间归属与别名，无论在 HA 原生界面、AI 工作台、SA 云端还是华为智慧生活/小艺触发均 100% 稳定成功
